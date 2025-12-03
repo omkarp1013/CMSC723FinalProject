@@ -68,9 +68,9 @@ python main.py all
 ## Next Steps
 
 After data collection:
-1. **Label tweets** (200-500 seed examples) - create a simple labeling tool
-2. **Generate synthetic data** using LLM
-3. **Fine-tune model** in Colab
+1. **Auto-label tweets** - runs automatically using TextBlob + VADER
+2. **Generate synthetic data** (optional) using LLM
+3. **Fine-tune model** in Colab using auto-labeled data
 4. **Extract features** and build prediction model
 
 ## Troubleshooting

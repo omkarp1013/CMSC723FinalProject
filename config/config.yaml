@@ -75,10 +75,10 @@ preprocessing:
   min_tweet_length: 10
   max_tweet_length: 280
 
-# Labeling settings
+# Labeling settings (automated using pre-trained models)
 labeling:
-  seed_labels_count: 300
-  synthetic_labels_count: 2000
+  method: "auto"  # Uses TextBlob + VADER + keyword matching
+  synthetic_labels_count: 2000  # Optional: generate synthetic data
   labels:
     sentiment: ["positive", "negative", "neutral"]
     stance: ["bullish", "bearish", "neutral"]
