@@ -1,0 +1,122 @@
+# Main configuration file for the project
+
+# Data paths
+data:
+  raw_dir: "data/raw"
+  processed_dir: "data/processed"
+  models_dir: "data/models"
+  tweets_dir: "data/raw/tweets"
+  markets_dir: "data/raw/markets"
+  labeled_dir: "data/processed/labeled_tweets"
+  features_dir: "data/processed/features"
+
+# Google Drive path (for Colab)
+colab:
+  drive_mount: "/content/drive"
+  project_path: "/content/drive/MyDrive/CMSC723FinalProject"
+  data_path: "/content/drive/MyDrive/CMSC723FinalProject/data"
+  models_path: "/content/drive/MyDrive/CMSC723FinalProject/data/models"
+
+# Tweet collection settings - Focused on 2024 US Presidential Election
+tweet_collection:
+  search_queries:
+    # Election-specific queries
+    - "2024 election"
+    - "2024 US election"
+    - "presidential election 2024"
+    - "election odds"
+    - "election prediction"
+    # Candidate-specific
+    - "Trump 2024"
+    - "Biden 2024"
+    - "Harris 2024"
+    - "election betting"
+    # Prediction market mentions
+    - "Kalshi election"
+    - "Polymarket election"
+    - "prediction market election"
+    # Hashtags
+    - "#2024Election"
+    - "#USElection2024"
+    - "#Trump2024"
+    - "#Biden2024"
+    - "#Harris2024"
+  max_tweets_per_query: 10000
+  date_range_days: 90  # Extended range to capture election period
+  output_format: "parquet"  # or "json"
+
+# Market data settings - 2024 US Presidential Election
+market_data:
+  sources: ["kalshi", "polymarket"]
+  contracts:
+    - name: "2024 US Presidential Election - Winner"
+      keywords: ["president", "election", "2024", "winner"]
+      kalshi_ticker: "PRES-2024"  # Example ticker format
+      polymarket_slug: "presidential-election-winner"  # Example slug
+    - name: "2024 US Presidential Election - Trump"
+      keywords: ["trump", "election", "2024"]
+      kalshi_ticker: "PRES-TRUMP-2024"
+      polymarket_slug: "trump-wins-2024"
+    - name: "2024 US Presidential Election - Biden/Harris"
+      keywords: ["biden", "harris", "election", "2024"]
+      kalshi_ticker: "PRES-BIDEN-2024"
+      polymarket_slug: "biden-harris-wins-2024"
+  price_update_frequency: "hourly"  # or "daily"
+  # Historical data collection
+  start_date: "2024-01-01"  # Start of election year
+  end_date: "2024-11-05"  # Election day
+
+# Preprocessing settings
+preprocessing:
+  remove_urls: true
+  remove_mentions: false  # Keep mentions as they might be informative
+  preserve_emojis: true
+  lowercase: true
+  min_tweet_length: 10
+  max_tweet_length: 280
+
+# Labeling settings
+labeling:
+  seed_labels_count: 300
+  synthetic_labels_count: 2000
+  labels:
+    sentiment: ["positive", "negative", "neutral"]
+    stance: ["bullish", "bearish", "neutral"]
+    betting_direction: ["up", "down", "neutral"]
+
+# Model settings
+model:
+  base_model: "unsloth/Llama-3.2-3B-Instruct"  # or "mistralai/Mistral-7B-Instruct-v0.2"
+  use_colab: true
+  lora_r: 16
+  lora_alpha: 32
+  lora_dropout: 0.05
+  learning_rate: 2e-4
+  num_epochs: 3
+  batch_size: 4
+  gradient_accumulation_steps: 4
+  max_seq_length: 512
+
+# Feature extraction settings
+features:
+  time_windows_hours: [1, 6, 24]  # Aggregate features over these time windows
+  sentiment_features:
+    - "polarity"
+    - "stance"
+    - "confidence"
+    - "volume"
+
+# Prediction settings
+prediction:
+  prediction_horizon_hours: 6  # Predict price movement in next N hours
+  train_test_split: 0.7
+  validation_split: 0.15
+  test_split: 0.15
+  model_type: "logistic_regression"  # or "xgboost", "random_forest"
+
+# Evaluation settings
+evaluation:
+  metrics: ["accuracy", "precision", "recall", "f1_score"]
+  correlation_method: "pearson"  # or "spearman"
+  statistical_test: true
+
